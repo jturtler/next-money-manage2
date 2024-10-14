@@ -1,32 +1,9 @@
 
+import Expense from "@/lib/mongodb/schemas/Expense.schema";
 import connectToDatabase from "@/util/mongoDb";
 import * as Utils from "@/util/utils";
 import mongoose, { Schema } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
-
-const ExpenseSchema = new Schema ( 
-	{
-		 userId: {
-			  type: String,
-			  required: true,
-			  ref: 'User',
-		 },
-		 categoryId: {
-			  type: String,
-			  required: true,
-		 },
-		 amount: { type: Number, required: true },
-		 description: { type: String, required: false },
-		 date: { type: Date, required: true },
-		 
-		 createdAt: { type: Date, default: Date.now },
-		 updatedAt: { type: Date, default: Date.now }
-	},
-	{
-		 timestamps: true,
-	}
-);
-const Expense = mongoose.models.Expense || mongoose.model('Expense', ExpenseSchema);
 
 export async function GET(request: NextRequest, { params } : { params: any }) {
 

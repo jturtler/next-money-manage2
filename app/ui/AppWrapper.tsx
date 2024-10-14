@@ -4,6 +4,7 @@ import * as Utils from "@/util/utils";
 import { useContextNavChoice } from "@/context/ContextNavChoice";
 import DataDisplay from "./pages/DataDisplay";
 import PieChartDisplay from "./pages/PieChartDisplay";
+import ExpenseForm from "./ExpenseForm";
 
 export default function AppWrapper() {
 	
@@ -22,10 +23,18 @@ export default function AppWrapper() {
 
 		// OPTOINAL?  Reverse the order..
 		const sortedArr = Utils.sortArrayByDate(responseJson);
-
+console.log(sortedArr);
 		setDataList( sortedArr);
 		setLoading(false);
 	};
+
+	const addExpense = (newExpense: any) => {
+		const list = Utils.cloneJSONObject(dataList);
+		list.push(newExpense);
+		
+		const sortedArr = Utils.sortArrayByDate(list);
+		setDataList(sortedArr);
+	} 
 
 	// 1. Download the data on load <-- on 'useEffect'.. unless it is refreshed by button - state?
 	// 2. loading progress tag
@@ -40,6 +49,7 @@ export default function AppWrapper() {
 				:<>
 				{ navChoice === 'Home' && <DataDisplay dataList={dataList} /> }
 				{ navChoice === 'PieChart' && <PieChartDisplay dataList={dataList} /> }
+				{ navChoice === 'AddExpense' && <ExpenseForm onSaveSuccess={(newExpense) => addExpense(newExpense)} /> }
 				</>
 			}
 		</div>

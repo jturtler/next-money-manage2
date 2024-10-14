@@ -95,7 +95,6 @@ export const isValidDate = (dateStr: string) => {
     return date instanceof Date && !isNaN(date.getTime());
 }
 
-
 export const generateMonthList = (startDate: Date, endDate: Date): any[] => {
   
     if (startDate > endDate) {

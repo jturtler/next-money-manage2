@@ -1,32 +1,7 @@
-import { Pie } from 'react-chartjs-2';
-import { Chart, ArcElement, Tooltip, Legend } from 'chart.js';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 
-// Register necessary Chart.js components
-Chart.register(ArcElement, Tooltip, Legend);
 
-type Expense = { value: number, category: string };
-
-export default function PieChart1() {
-
-	const expenses: Expense[] = [
-		{ value: 500, category: 'Rent' },
-		{ value: 200, category: 'Groceries' },
-		{ value: 150, category: 'Utilities' },
-		{ value: 100, category: 'Entertainment' },
-		{ value: 50, category: 'Transport' }
-	];
-
-	const data = {
-		labels: expenses.map(expense => expense.category), // categories as labels
-		datasets: [
-			{
-				label: 'Expenses by Category',
-				data: expenses.map(expense => expense.value), // values as data points
-				backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'], // colors for pie slices
-				hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
-			},
-		],
-	};
+export default function PieChart1({ chartData, categories }: { chartData: any, categories: any[] }) {
 
 	const options = {
 		responsive: true,
@@ -42,11 +17,36 @@ export default function PieChart1() {
 	};
 
 	return (
-		<div className='flex flex-col items-center'>
-			<div className="w-8/12">
-				<Pie data={data} options={options} />
+		<div className="flex items-center">
+			<div className="w-full max-w-[500px]"> {/* Adjust max-width as needed */}
+				<ResponsiveContainer width={400} height={400}>
+					<PieChart>
+						<Pie
+							data={chartData}
+							nameKey="categoryName"
+							dataKey="total"
+							cx={200}
+							cy={200}
+							label
+						>
+							{chartData.map((entry: any, index: number) => (
+								<Cell key={`cell-${index}`} fill={entry.color} />
+							))}
+						</Pie>
+						<Tooltip />
+					</PieChart>
+				</ResponsiveContainer>
 			</div>
-			<div className="mt-4">[*NOTE]: This chart is not based on actual data due to the data not currently not being marked with categories. </div>
+
+			{/* Category List - Place in the second column */}
+			<div className="flex flex-col items-start justify-between">
+				{categories!.map((category, idx) => (
+					<div className="flex flex-row m-1 items-center justify-between" key={category._id}>
+						<div style={{ backgroundColor: category.color }} className="w-4 h-4 rounded-full"></div>
+						<div className="px-3 text-right whitespace-nowrap">{category.name}</div>
+					</div>
+				))}
+			</div>
 
 		</div>
 	);
